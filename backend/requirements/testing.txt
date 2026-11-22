@@ -20,5 +20,5 @@ fakeredis==2.26.2
 # --- Lint (used in CI) ---
 black==24.10.0
 isort==5.13.2
-flake8==7.1.1
+flake8==6.1.0
 flake8-django==1.4
