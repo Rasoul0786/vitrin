@@ -1,14 +1,15 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Avg, Count, Q
 from django.utils.translation import gettext_lazy as _
-from rest_framework import viewsets, status, filters
+
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from . import models, serializers
 from .filters import ProductFilter
-from .pagination import ProductPagination, CommentPagination
+from .pagination import CommentPagination, ProductPagination
 from .permissions import IsAdminOrReadOnly
 from .services import WishlistService
 from .throttles import CommentCreateThrottle
@@ -84,15 +85,15 @@ class ProductViewSet(viewsets.ModelViewSet):
         )
 
     def filter_queryset(self, queryset):
-        search_query = self.request.query_params.get('search', '').strip()
+        search_query = self.request.query_params.get("search", "").strip()
         if search_query:
-            search_query = search_query.replace('ي', 'ی').replace('ك', 'ک')
+            search_query = search_query.replace("ي", "ی").replace("ك", "ک")
             queryset = queryset.filter(
-                Q(title__icontains=search_query) | 
-                Q(description__icontains=search_query) |
-                Q(category__name__icontains=search_query)
+                Q(title__icontains=search_query)
+                | Q(description__icontains=search_query)
+                | Q(category__name__icontains=search_query)
             )
-        
+
         for backend in list(self.filter_backends):
             if backend != filters.SearchFilter:
                 queryset = backend().filter_queryset(self.request, queryset, self)

@@ -1,8 +1,9 @@
 import time
 import uuid
 
-import redis
 from django.conf import settings
+
+import redis
 
 from .models import Product, Wishlist
 

@@ -1,8 +1,9 @@
 import secrets
+
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
 
 
 class Order(models.Model):
@@ -111,8 +112,12 @@ class OrderItem(models.Model):
         related_name="order_items",
         verbose_name=_("Variant"),
     )
-    product_title = models.CharField(max_length=255, blank=True, verbose_name=_("Product Title"))
-    color_name = models.CharField(max_length=50, blank=True, verbose_name=_("Color Name"))
+    product_title = models.CharField(
+        max_length=255, blank=True, verbose_name=_("Product Title")
+    )
+    color_name = models.CharField(
+        max_length=50, blank=True, verbose_name=_("Color Name")
+    )
     size_name = models.CharField(max_length=50, blank=True, verbose_name=_("Size Name"))
     unit_price = models.PositiveBigIntegerField(default=0, verbose_name=_("Unit Price"))
     quantity = models.PositiveIntegerField(default=1, verbose_name=_("Quantity"))

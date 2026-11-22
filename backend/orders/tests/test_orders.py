@@ -28,17 +28,11 @@ def _payload(variant, quantity=1, **overrides):
 class TestOrderCreate:
     url = "/api/orders/"
 
-    def test_unauthenticated_cannot_create(
-        self, api_client, product_variant
-    ):
-        response = api_client.post(
-            self.url, _payload(product_variant), format="json"
-        )
+    def test_unauthenticated_cannot_create(self, api_client, product_variant):
+        response = api_client.post(self.url, _payload(product_variant), format="json")
         assert response.status_code in (401, 403)
 
-    def test_create_order_success(
-        self, authenticated_client, user, product_variant
-    ):
+    def test_create_order_success(self, authenticated_client, user, product_variant):
         response = authenticated_client.post(
             self.url, _payload(product_variant, quantity=2), format="json"
         )
@@ -51,9 +45,7 @@ class TestOrderCreate:
         assert data["items"][0]["quantity"] == 2
         assert Order.objects.filter(user=user).count() == 1
 
-    def test_stock_is_decremented(
-        self, authenticated_client, product_variant
-    ):
+    def test_stock_is_decremented(self, authenticated_client, product_variant):
         assert product_variant.stock == 10
         authenticated_client.post(
             self.url, _payload(product_variant, quantity=3), format="json"
@@ -61,9 +53,7 @@ class TestOrderCreate:
         product_variant.refresh_from_db()
         assert product_variant.stock == 7
 
-    def test_insufficient_stock_fails(
-        self, authenticated_client, product_variant
-    ):
+    def test_insufficient_stock_fails(self, authenticated_client, product_variant):
         response = authenticated_client.post(
             self.url, _payload(product_variant, quantity=100), format="json"
         )
@@ -76,27 +66,19 @@ class TestOrderCreate:
             **BASE_ORDER_PAYLOAD,
             "items": [{"variant_id": 99999, "quantity": 1}],
         }
-        response = authenticated_client.post(
-            self.url, payload, format="json"
-        )
+        response = authenticated_client.post(self.url, payload, format="json")
         assert response.status_code == 400
 
     def test_empty_items_fails(self, authenticated_client, db):
         payload = {**BASE_ORDER_PAYLOAD, "items": []}
-        response = authenticated_client.post(
-            self.url, payload, format="json"
-        )
+        response = authenticated_client.post(self.url, payload, format="json")
         assert response.status_code == 400
 
-    def test_missing_required_fields(
-        self, authenticated_client, product_variant
-    ):
+    def test_missing_required_fields(self, authenticated_client, product_variant):
         payload = {
             "items": [{"variant_id": product_variant.id, "quantity": 1}],
         }
-        response = authenticated_client.post(
-            self.url, payload, format="json"
-        )
+        response = authenticated_client.post(self.url, payload, format="json")
         assert response.status_code == 400
 
     def test_discounted_price_in_order(
@@ -203,12 +185,8 @@ class TestOrderCancel:
             format="json",
         )
 
-    def test_cancel_restores_stock(
-        self, authenticated_client, product_variant
-    ):
-        create = self._create_order(
-            authenticated_client, product_variant, quantity=2
-        )
+    def test_cancel_restores_stock(self, authenticated_client, product_variant):
+        create = self._create_order(authenticated_client, product_variant, quantity=2)
         order_id = create.data["id"]
 
         product_variant.refresh_from_db()
@@ -227,30 +205,20 @@ class TestOrderCancel:
         order = Order.objects.get(pk=order_id)
         assert order.status == Order.Status.CANCELLED
 
-    def test_cannot_cancel_twice(
-        self, authenticated_client, product_variant
-    ):
-        create = self._create_order(
-            authenticated_client, product_variant, quantity=1
-        )
+    def test_cannot_cancel_twice(self, authenticated_client, product_variant):
+        create = self._create_order(authenticated_client, product_variant, quantity=1)
         order_id = create.data["id"]
 
-        authenticated_client.post(
-            f"/api/orders/{order_id}/cancel/", format="json"
-        )
+        authenticated_client.post(f"/api/orders/{order_id}/cancel/", format="json")
         response = authenticated_client.post(
             f"/api/orders/{order_id}/cancel/", format="json"
         )
         assert response.status_code == 400
 
-    def test_cannot_cancel_shipped_order(
-        self, authenticated_client, product_variant
-    ):
+    def test_cannot_cancel_shipped_order(self, authenticated_client, product_variant):
         from orders.models import Order
 
-        create = self._create_order(
-            authenticated_client, product_variant, quantity=1
-        )
+        create = self._create_order(authenticated_client, product_variant, quantity=1)
         order_id = create.data["id"]
 
         order = Order.objects.get(pk=order_id)

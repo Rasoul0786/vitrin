@@ -1,7 +1,8 @@
 from datetime import timedelta
 
-import pytest
 from django.utils import timezone
+
+import pytest
 
 from cart.models import Coupon
 
@@ -50,26 +51,20 @@ class TestCouponApply:
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        response = api_client.post(
-            self.apply_url, {"code": "SAVE10"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "SAVE10"}, format="json")
         assert response.status_code == 200
         assert response.data["coupon"] is not None
         assert response.data["coupon"]["code"] == "SAVE10"
         assert response.data["discount_amount"] == 100_000
         assert response.data["total"] == 900_000
 
-    def test_coupon_code_is_case_insensitive(
-        self, api_client, product_variant, coupon
-    ):
+    def test_coupon_code_is_case_insensitive(self, api_client, product_variant, coupon):
         api_client.post(
             self.items_url,
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        response = api_client.post(
-            self.apply_url, {"code": "save10"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "save10"}, format="json")
         assert response.status_code == 200
         assert response.data["coupon"]["code"] == "SAVE10"
 
@@ -81,9 +76,7 @@ class TestCouponApply:
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        response = api_client.post(
-            self.apply_url, {"code": "CAP200K"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "CAP200K"}, format="json")
         assert response.status_code == 200
         # 50 percent of 1000000 = 500000, capped at 200000
         assert response.data["discount_amount"] == 200_000
@@ -95,9 +88,7 @@ class TestCouponApply:
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        response = api_client.post(
-            self.apply_url, {"code": "NOPE"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "NOPE"}, format="json")
         assert response.status_code == 400
 
     def test_apply_inactive_coupon(self, api_client, product_variant, coupon):
@@ -109,9 +100,7 @@ class TestCouponApply:
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        response = api_client.post(
-            self.apply_url, {"code": "SAVE10"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "SAVE10"}, format="json")
         assert response.status_code == 400
 
     def test_apply_expired_coupon(self, api_client, product_variant, coupon):
@@ -123,14 +112,10 @@ class TestCouponApply:
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        response = api_client.post(
-            self.apply_url, {"code": "SAVE10"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "SAVE10"}, format="json")
         assert response.status_code == 400
 
-    def test_apply_not_yet_started_coupon(
-        self, api_client, product_variant, coupon
-    ):
+    def test_apply_not_yet_started_coupon(self, api_client, product_variant, coupon):
         coupon.valid_from = timezone.now() + timedelta(days=1)
         coupon.save(update_fields=["valid_from"])
 
@@ -139,9 +124,7 @@ class TestCouponApply:
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        response = api_client.post(
-            self.apply_url, {"code": "SAVE10"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "SAVE10"}, format="json")
         assert response.status_code == 400
 
     def test_max_uses_reached(self, api_client, product_variant, coupon):
@@ -154,15 +137,11 @@ class TestCouponApply:
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        response = api_client.post(
-            self.apply_url, {"code": "SAVE10"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "SAVE10"}, format="json")
         assert response.status_code == 400
 
     def test_apply_coupon_on_empty_cart_fails(self, api_client, coupon):
-        response = api_client.post(
-            self.apply_url, {"code": "SAVE10"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "SAVE10"}, format="json")
         assert response.status_code == 400
         assert "empty" in response.data["detail"].lower()
 
@@ -172,17 +151,13 @@ class TestCouponApply:
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        api_client.post(
-            self.apply_url, {"code": "SAVE10"}, format="json"
-        )
+        api_client.post(self.apply_url, {"code": "SAVE10"}, format="json")
         response = api_client.delete(self.apply_url)
         assert response.status_code == 200
         assert response.data["coupon"] is None
         assert response.data["discount_amount"] == 0
 
-    def test_min_purchase_not_met(
-        self, api_client, product_variant, coupon
-    ):
+    def test_min_purchase_not_met(self, api_client, product_variant, coupon):
         coupon.min_purchase = 5_000_000
         coupon.save(update_fields=["min_purchase"])
 
@@ -191,7 +166,5 @@ class TestCouponApply:
             {"variant_id": product_variant.id, "quantity": 1},
             format="json",
         )
-        response = api_client.post(
-            self.apply_url, {"code": "SAVE10"}, format="json"
-        )
+        response = api_client.post(self.apply_url, {"code": "SAVE10"}, format="json")
         assert response.status_code == 400

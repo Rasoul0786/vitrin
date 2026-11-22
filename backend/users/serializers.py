@@ -15,9 +15,7 @@ class LoginSerializer(serializers.Serializer):
         value = value.strip()
 
         if not value:
-            raise serializers.ValidationError(
-                "نام کاربری یا ایمیل الزامی است."
-            )
+            raise serializers.ValidationError("نام کاربری یا ایمیل الزامی است.")
 
         return value
 
@@ -42,50 +40,33 @@ class SignupSerializer(serializers.Serializer):
         value = value.strip()
 
         if not value:
-            raise serializers.ValidationError(
-                "نام کاربری الزامی است."
-            )
+            raise serializers.ValidationError("نام کاربری الزامی است.")
 
-        if CustomUser.objects.filter(
-            username__iexact=value
-        ).exists():
-            raise serializers.ValidationError(
-                "این نام کاربری قبلاً استفاده شده است."
-            )
+        if CustomUser.objects.filter(username__iexact=value).exists():
+            raise serializers.ValidationError("این نام کاربری قبلاً استفاده شده است.")
 
         return value
 
     def validate_email(self, value):
         value = value.strip().lower()
 
-        if CustomUser.objects.filter(
-            email__iexact=value
-        ).exists():
-            raise serializers.ValidationError(
-                "این ایمیل قبلاً ثبت شده است."
-            )
+        if CustomUser.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError("این ایمیل قبلاً ثبت شده است.")
 
         return value
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password_confirm"]:
             raise serializers.ValidationError(
-                {
-                    "password_confirm":
-                        "رمزهای عبور یکسان نیستند."
-                }
+                {"password_confirm": "رمزهای عبور یکسان نیستند."}
             )
 
-        validate_password(
-            attrs["password"]
-        )
+        validate_password(attrs["password"])
 
         return attrs
 
     def create(self, validated_data):
-        validated_data.pop(
-            "password_confirm"
-        )
+        validated_data.pop("password_confirm")
 
         user = CustomUser.objects.create_user(
             username=validated_data["username"],
@@ -93,16 +74,12 @@ class SignupSerializer(serializers.Serializer):
             password=validated_data["password"],
         )
 
-        Profile.objects.create(
-            user=user
-        )
+        Profile.objects.create(user=user)
 
         return user
 
 
-class ProfileSerializer(
-    serializers.ModelSerializer
-):
+class ProfileSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(
         source="user.id",
         read_only=True,
@@ -151,19 +128,13 @@ class ProfileSerializer(
 
         user = self.instance.user if self.instance else None
 
-        queryset = CustomUser.objects.filter(
-            email__iexact=value
-        )
+        queryset = CustomUser.objects.filter(email__iexact=value)
 
         if user:
-            queryset = queryset.exclude(
-                pk=user.pk
-            )
+            queryset = queryset.exclude(pk=user.pk)
 
         if queryset.exists():
-            raise serializers.ValidationError(
-                "این ایمیل قبلاً استفاده شده است."
-            )
+            raise serializers.ValidationError("این ایمیل قبلاً استفاده شده است.")
 
         return value
 
@@ -174,12 +145,8 @@ class ProfileSerializer(
         )
 
         if "email" in user_data:
-            instance.user.email = user_data[
-                "email"
-            ]
-            instance.user.save(
-                update_fields=["email"]
-            )
+            instance.user.email = user_data["email"]
+            instance.user.save(update_fields=["email"])
 
         return super().update(
             instance,
@@ -187,9 +154,7 @@ class ProfileSerializer(
         )
 
 
-class AddressSerializer(
-    serializers.ModelSerializer
-):
+class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
 
@@ -214,19 +179,13 @@ class AddressSerializer(
     def create(self, validated_data):
         user = self.context["request"].user
 
-        if validated_data.get(
-            "is_default"
-        ):
+        if validated_data.get("is_default"):
             Address.objects.filter(
                 user=user,
                 is_default=True,
-            ).update(
-                is_default=False
-            )
+            ).update(is_default=False)
 
-        if not Address.objects.filter(
-            user=user
-        ).exists():
+        if not Address.objects.filter(user=user).exists():
             validated_data["is_default"] = True
 
         return Address.objects.create(
@@ -239,17 +198,13 @@ class AddressSerializer(
         instance,
         validated_data,
     ):
-        if validated_data.get(
-            "is_default"
-        ):
+        if validated_data.get("is_default"):
             Address.objects.filter(
                 user=instance.user,
                 is_default=True,
             ).exclude(
                 pk=instance.pk
-            ).update(
-                is_default=False
-            )
+            ).update(is_default=False)
 
         return super().update(
             instance,

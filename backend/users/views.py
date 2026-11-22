@@ -20,7 +20,6 @@ from rest_framework.permissions import (
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
-
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -79,11 +78,9 @@ class LoginView(APIView):
         identifier = serializer.validated_data["identifier"]
         password = serializer.validated_data["password"]
 
-        user = (
-            CustomUser.objects.filter(
-                Q(username__iexact=identifier) | Q(email__iexact=identifier)
-            ).first()
-        )
+        user = CustomUser.objects.filter(
+            Q(username__iexact=identifier) | Q(email__iexact=identifier)
+        ).first()
 
         if not user or not user.check_password(password):
             return Response(

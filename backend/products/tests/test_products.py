@@ -121,9 +121,7 @@ class TestProductWrite:
         }
 
     def test_anonymous_cannot_create(self, api_client, category):
-        response = api_client.post(
-            self.url, self._payload(category), format="json"
-        )
+        response = api_client.post(self.url, self._payload(category), format="json")
         assert response.status_code in (401, 403)
 
     def test_authenticated_non_staff_cannot_create(
@@ -135,9 +133,7 @@ class TestProductWrite:
         assert response.status_code == 403
 
     def test_staff_can_create(self, staff_client, category):
-        response = staff_client.post(
-            self.url, self._payload(category), format="json"
-        )
+        response = staff_client.post(self.url, self._payload(category), format="json")
         assert response.status_code == 201
         assert response.data["title"] == "New Product"
 
@@ -148,9 +144,7 @@ class TestProductWrite:
         assert response.status_code == 201
         assert response.data["slug"] == "test-slug-product"
 
-    def test_non_staff_cannot_update(
-        self, authenticated_client, product
-    ):
+    def test_non_staff_cannot_update(self, authenticated_client, product):
         response = authenticated_client.patch(
             f"/api/products/{product.slug}/",
             {"title": "Hacked"},

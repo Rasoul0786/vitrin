@@ -3,19 +3,21 @@ from unittest import mock
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.test import TestCase
+
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from users.models import CustomUser
 from products.models import (
     Category,
     Color,
-    Size,
     Product,
     ProductVariant,
+    Size,
 )
+from users.models import CustomUser
+
 from .models import Order, OrderItem
-from .services import create_order, cancel_order
+from .services import cancel_order, create_order
 
 
 # =========================================================

@@ -1,13 +1,14 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
+
 from .models import (
     Category,
     Color,
-    Size,
+    Comment,
     Product,
     ProductImage,
-    Comment,
     ProductVariant,
+    Size,
     Wishlist,
 )
 
@@ -92,6 +93,7 @@ class CommentAdmin(admin.ModelAdmin):
     def reject_comments(self, request, queryset):
         updated = queryset.update(is_published=False)
         self.message_user(request, f"{updated} comment(s) rejected.")
+
 
 @admin.register(Wishlist)
 class WishlistAdmin(admin.ModelAdmin):

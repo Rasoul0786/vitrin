@@ -1,18 +1,20 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
-from rest_framework import viewsets, mixins, status
+
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from cart.services import CartService, CouponService
+
 from .models import Order
-from .serializers import (
-    OrderListSerializer,
-    OrderDetailSerializer,
-    OrderCreateSerializer,
-)
 from .permissions import IsOrderOwnerOrStaff
-from .services import create_order, cancel_order
+from .serializers import (
+    OrderCreateSerializer,
+    OrderDetailSerializer,
+    OrderListSerializer,
+)
+from .services import cancel_order, create_order
 
 
 class OrderViewSet(
@@ -27,7 +29,7 @@ class OrderViewSet(
         qs = Order.objects.prefetch_related("items").select_related("user")
         if self.request.user.is_staff:
             return qs
-        if getattr(self, 'swagger_fake_view', False):
+        if getattr(self, "swagger_fake_view", False):
             return qs.none()
         return qs.filter(user=self.request.user)
 

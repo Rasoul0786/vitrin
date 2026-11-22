@@ -56,6 +56,7 @@ def _fake_redis(monkeypatch):
     This lets cart/orders tests run without a real Redis server.
     """
     import fakeredis
+
     from cart import services as cart_services
 
     fake = fakeredis.FakeStrictRedis(decode_responses=True)

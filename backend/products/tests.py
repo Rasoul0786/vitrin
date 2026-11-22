@@ -1,27 +1,29 @@
-from decimal import Decimal
 import io
 import shutil
 import tempfile
+from decimal import Decimal
 
 from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import connection
 from django.test import TestCase, override_settings
 from django.test.utils import CaptureQueriesContext
+
 from PIL import Image
 from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.test import APIClient, APITestCase
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.models import CustomUser
+
 from .models import (
     Category,
     Color,
-    Size,
+    Comment,
     Product,
     ProductImage,
-    Comment,
     ProductVariant,
+    Size,
 )
 
 

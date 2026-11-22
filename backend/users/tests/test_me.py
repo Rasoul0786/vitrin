@@ -1,5 +1,6 @@
-import pytest
 from django.contrib.auth import get_user_model
+
+import pytest
 
 User = get_user_model()
 
@@ -31,9 +32,7 @@ class TestMe:
         user.refresh_from_db()
         assert user.email == "updated@example.com"
 
-    def test_patch_duplicate_email_rejected(
-        self, authenticated_client, user, db
-    ):
+    def test_patch_duplicate_email_rejected(self, authenticated_client, user, db):
         User.objects.create_user(
             username="other",
             email="other@example.com",

@@ -14,9 +14,7 @@ class TestGuestCart:
         assert response.data["subtotal"] == 0
         assert response.data["total"] == 0
 
-    def test_add_item_persists_across_requests(
-        self, api_client, product_variant
-    ):
+    def test_add_item_persists_across_requests(self, api_client, product_variant):
         payload = {"variant_id": product_variant.id, "quantity": 2}
         add_resp = api_client.post(self.items_url, payload, format="json")
         assert add_resp.status_code == 200

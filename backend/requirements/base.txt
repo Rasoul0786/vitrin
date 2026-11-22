@@ -1,20 +1,20 @@
 # --- Core ---
-Django==5.1.4
-djangorestframework==3.15.2
-djangorestframework-simplejwt==5.3.1
-drf-spectacular==0.28.0
+Django
+djangorestframework
+djangorestframework-simplejwt
+drf-spectacular
 
 # --- Filtering / CORS / Env ---
-django-filter==24.3
-django-cors-headers==4.6.0
-django-environ==0.11.2
+django-filter
+django-cors-headers
+django-environ
 
 # --- Cache / Redis ---
-django-redis==5.4.0
-redis==5.2.1
+django-redis
+redis
 
 # --- Database driver ---
-psycopg2-binary==2.9.10
+psycopg2-binary
 
 # --- Media / Images ---
-Pillow==11.0.0
+Pillow

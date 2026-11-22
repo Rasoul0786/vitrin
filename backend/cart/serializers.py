@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from products.models import ProductVariant, ProductImage
+from products.models import ProductImage, ProductVariant
+
 from .models import Coupon
 
 

@@ -6,7 +6,7 @@ import environ
 # -----------------------------------------------------------------------------
 # Paths & Env
 # -----------------------------------------------------------------------------
-BASE_DIR = Path(__file__).resolve().parent.parent.parent   # → backend/
+BASE_DIR = Path(__file__).resolve().parent.parent.parent  # → backend/
 
 env = environ.Env(
     DEBUG=(bool, False),
@@ -88,7 +88,9 @@ DATABASES["default"]["CONN_MAX_AGE"] = env("CONN_MAX_AGE")
 AUTH_USER_MODEL = "users.CustomUser"
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -102,9 +104,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.OrderingFilter",

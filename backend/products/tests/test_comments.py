@@ -36,9 +36,7 @@ class TestCommentCreate:
 
     def test_guest_can_create_comment(self, api_client, product):
         payload = {"name": "Guest", "text": "Nice!", "stars": 5}
-        response = api_client.post(
-            self._url(product), payload, format="json"
-        )
+        response = api_client.post(self._url(product), payload, format="json")
         assert response.status_code == 201
         assert Comment.objects.filter(name="Guest").exists()
 
@@ -50,22 +48,16 @@ class TestCommentCreate:
 
     def test_stars_must_be_in_range(self, api_client, product):
         payload = {"name": "Guest", "text": "Bad stars", "stars": 10}
-        response = api_client.post(
-            self._url(product), payload, format="json"
-        )
+        response = api_client.post(self._url(product), payload, format="json")
         assert response.status_code == 400
 
     def test_name_and_text_required(self, api_client, product):
-        response = api_client.post(
-            self._url(product), {"stars": 5}, format="json"
-        )
+        response = api_client.post(self._url(product), {"stars": 5}, format="json")
         assert response.status_code == 400
 
 
 class TestCommentModeration:
-    def test_staff_can_approve(
-        self, staff_client, unpublished_comment
-    ):
+    def test_staff_can_approve(self, staff_client, unpublished_comment):
         response = staff_client.post(
             f"/api/comments/{unpublished_comment.id}/approve/",
             format="json",
@@ -74,9 +66,7 @@ class TestCommentModeration:
         unpublished_comment.refresh_from_db()
         assert unpublished_comment.is_published is True
 
-    def test_staff_can_reject(
-        self, staff_client, published_comment
-    ):
+    def test_staff_can_reject(self, staff_client, published_comment):
         response = staff_client.post(
             f"/api/comments/{published_comment.id}/reject/",
             format="json",
@@ -85,9 +75,7 @@ class TestCommentModeration:
         published_comment.refresh_from_db()
         assert published_comment.is_published is False
 
-    def test_non_staff_cannot_approve(
-        self, authenticated_client, unpublished_comment
-    ):
+    def test_non_staff_cannot_approve(self, authenticated_client, unpublished_comment):
         response = authenticated_client.post(
             f"/api/comments/{unpublished_comment.id}/approve/",
             format="json",
