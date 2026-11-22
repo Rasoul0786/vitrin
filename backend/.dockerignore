@@ -78,7 +78,6 @@ requirements/testing.txt
 # Docker files themselves
 # -----------------------------------------------------------------------------
 Dockerfile
-docker-entrypoint.sh
 .dockerignore
 
 # -----------------------------------------------------------------------------
