@@ -80,6 +80,6 @@ jobs:
             set -e
             cd ${{ secrets.DEPLOY_PATH }}
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker compose pull backend
-            docker compose up -d --no-deps backend
+            docker compose pull web
+            docker compose up -d --no-deps web
             docker image prune -f
