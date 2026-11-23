@@ -1,16 +1,10 @@
-# =============================================================================
-# Development environment
-# Install: pip install -r requirements/development.txt
-# =============================================================================
-
 -r base.txt
-
-# --- Debug and development tools ---
-django-extensions
-ipython
-
-# --- Testing (shared with CI) ---
 -r testing.txt
+-r lint.txt
 
-# --- Pre-commit (local only) ---
-pre-commit
+# Development tools
+django-extensions==4.1
+ipython==9.18.1
+
+# Git hooks
+pre-commit==4.7.0

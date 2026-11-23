@@ -1,20 +1,11 @@
-# --- Core ---
-Django
-djangorestframework
-djangorestframework-simplejwt
-drf-spectacular
-
-# --- Filtering / CORS / Env ---
-django-filter
-django-cors-headers
-django-environ
-
-# --- Cache / Redis ---
-django-redis
-redis
-
-# --- Database driver ---
-psycopg2-binary
-
-# --- Media / Images ---
-Pillow
+Django==5.2.19
+djangorestframework==3.17.2
+djangorestframework-simplejwt==5.5.1
+drf-spectacular==0.30.0
+django-filter==26.2
+django-cors-headers==4.9.0
+django-environ==0.14.0
+django-redis==7.0.0
+redis==8.1.0
+psycopg2-binary==2.9.13
+Pillow==13.0.0

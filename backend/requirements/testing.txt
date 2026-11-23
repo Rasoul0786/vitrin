@@ -1,25 +1,12 @@
-# =============================================================================
-# Testing / CI requirements
-# Install: pip install -r requirements/base.txt -r requirements/testing.txt
-# =============================================================================
+pytest==9.2.0
+pytest-django==4.14.0
+pytest-cov==7.1.0
+pytest-xdist==3.8.0
 
-# --- Test runner ---
-pytest
-pytest-django
-pytest-cov
-pytest-xdist
-django-debug-toolbar
+django-debug-toolbar==8.0.0
 
-# --- Factories & fixtures ---
-factory-boy
-freezegun
-Faker
+factory-boy==3.3.3
+freezegun==1.5.5
+Faker==40.63.0
 
-# --- Fake Redis for cart tests ---
-fakeredis
-
-# --- Lint (used in CI) ---
-black
-isort
-flake8
-flake8-django
+fakeredis==2.40.0

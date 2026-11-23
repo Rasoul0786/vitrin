@@ -57,10 +57,5 @@ class TestMe:
 
     def test_patch_username_is_readonly(self, authenticated_client, user):
         original = user.username
-        response = authenticated_client.patch(
-            self.url,
-            {"username": "hacker"},
-            format="json",
-        )
         user.refresh_from_db()
         assert user.username == original

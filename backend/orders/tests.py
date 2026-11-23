@@ -7,13 +7,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from products.models import (
-    Category,
-    Color,
-    Product,
-    ProductVariant,
-    Size,
-)
+from products.models import Category, Color, Product, ProductVariant, Size
 from users.models import CustomUser
 
 from .models import Order, OrderItem
@@ -322,8 +316,8 @@ class CreateOrderServiceTests(BaseSetUpMixin, TestCase):
         order = create_order(
             user=self.user,
             cart_items=make_items(
-                (self.variant_blue_s.id, 2),  # 180_000
-                (self.variant_red_m.id, 1),  #  90_000
+                (self.variant_blue_s.id, 2),
+                (self.variant_red_m.id, 1),
             ),
             shipping_data=make_shipping(),
         )

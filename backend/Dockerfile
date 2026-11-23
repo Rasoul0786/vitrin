@@ -29,7 +29,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Copy only requirement files first to maximize layer caching
 COPY requirements/ requirements/
 RUN pip install --upgrade pip && \
-    pip install -r requirements/production.txt
+    pip install --no-cache-dir -r requirements/production.txt
 
 
 # -----------------------------------------------------------------------------

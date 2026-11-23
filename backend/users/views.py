@@ -1,22 +1,10 @@
-from django.contrib.auth import (
-    login,
-    logout,
-)
+from django.contrib.auth import login, logout
 from django.db.models import Q
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from rest_framework import (
-    status,
-    viewsets,
-)
-from rest_framework.decorators import (
-    api_view,
-    permission_classes,
-)
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-)
+from rest_framework import status, viewsets
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
