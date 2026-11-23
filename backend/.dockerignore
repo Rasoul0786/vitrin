@@ -71,8 +71,8 @@ Thumbs.db
 # -----------------------------------------------------------------------------
 # Dev-only requirements (not needed in the image)
 # -----------------------------------------------------------------------------
-requirements/development.txt
-requirements/testing.txt
+!requirements/development.txt
+!requirements/testing.txt
 
 # -----------------------------------------------------------------------------
 # Docker files themselves
