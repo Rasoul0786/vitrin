@@ -62,7 +62,10 @@ class TestProductList:
             discount=0,
             category=other_cat,
         )
-        response = api_client.get(self.url, {"category": category.id})
+        response = api_client.get(
+            self.url,
+            {"category": category.slug},
+        )
         results = response.data["results"]
         titles = [r["title"] for r in results]
         assert "Running Shoe" in titles
