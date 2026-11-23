@@ -1,7 +1,10 @@
 import time
 import uuid
+
 from django.conf import settings
+
 import redis
+
 from .models import Product, Wishlist
 
 redis_client = redis.Redis.from_url(settings.REDIS_URL, decode_responses=True)
